@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RxKotlin Sample</string>
+    <string name="click_me">Click me!</string>
+    <string name="button_clicked">Button clicked!</string>
+</resources>
