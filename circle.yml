@@ -1,6 +1,6 @@
 machine:
   environment:
-    APP_HOME: /home/ubuntu/RxKotlinSample/app
+    APP_HOME: /home/ubuntu/Rx-Kotlin-Sample/app
     PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-2.10/bin:$PATH"
     ADB_INSTALL_TIMEOUT : 20
     GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxPermSize=512m -Xms512m"'
