@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.github.kt3k.coveralls'
 
 project.ext.preDexLibs = !project.hasProperty('disablePreDex')
 
@@ -24,6 +25,7 @@ buildscript {
     dependencies {
         classpath 'com.netflix.nebula:gradle-rxjava-project-plugin:2.2.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
     }
 }
 
@@ -106,4 +108,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedCheck', 'test'])
     sourceDirectories = files([android.sourceSets.main.java.srcDirs])
     classDirectories = files([debugTree])
     executionData = fileTree(dir: project.projectDir, includes: ['**/*.exec', '**/*.ec'])
+}
+
+tasks.coveralls {
+    onlyIf { System.getenv("COVERALLS_REPO_TOKEN") }
 }

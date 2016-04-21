@@ -3,6 +3,7 @@ machine:
     APP_HOME: /home/ubuntu/RxKotlinSample/app
     PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-2.10/bin:$PATH"
     ADB_INSTALL_TIMEOUT : 20
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxPermSize=512m -Xms512m"'
     CI_BUILD_NUMBER: $CIRCLE_BUILD_NUM
     CI_BUILD_URL: $CIRCLE_BUILD_URL
     CI_BRANCH: $CIRCLE_BRANCH
