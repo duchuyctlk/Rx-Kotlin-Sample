@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
+apply plugin: 'kotlin-android'
 
 project.ext.preDexLibs = !project.hasProperty('disablePreDex')
 
@@ -15,17 +16,16 @@ subprojects {
 
 buildscript {
     ext.kotlin_version = '1.0.1-2'
+    ext.jacoco_version = '0.7.6.201602180812'
     repositories {
         mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath 'com.netflix.nebula:gradle-rxjava-project-plugin:2.2.3',
-                "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.netflix.nebula:gradle-rxjava-project-plugin:2.2.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-
-apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 23
@@ -78,8 +78,8 @@ repositories {
     mavenCentral()
 }
 
-if (project.hasProperty('release.useLastTag')) {
-    tasks.prepare.enabled = false
+jacoco {
+    toolVersion = '0.7.6.201602180812'
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedCheck', 'test']) {
@@ -87,12 +87,12 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedCheck', 'test'])
     description = 'Generate Jacoco coverage reports after running tests.'
 
     reports {
-        xml.enabled = true
+        xml.enabled = false
         html.enabled = true
     }
 
     // use hidden configuration, for details look into JacocoPlugin.groovy
-    jacocoClasspath = project.configurations['androidJacocoAnt']
+    //jacocoClasspath = project.configurations['androidJacocoAnt']
 
     // exclude auto-generated classes and tests
     def fileFilter = ['**/R.class',
@@ -102,9 +102,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedCheck', 'test'])
                       '**/*Test*.*',
                       'android/**/*.*']
     def debugTree = fileTree(dir: "${project.buildDir}/intermediates/classes/debug", excludes: fileFilter)
-    def mainSrc = "${project.projectDir}/src/main/java"
 
-    sourceDirectories = files([mainSrc])
+    sourceDirectories = files([android.sourceSets.main.java.srcDirs])
     classDirectories = files([debugTree])
     executionData = fileTree(dir: project.projectDir, includes: ['**/*.exec', '**/*.ec'])
 }
