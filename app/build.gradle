@@ -17,7 +17,7 @@ subprojects {
 
 buildscript {
     ext.kotlin_version = '1.0.1-2'
-    ext.jacoco_version = '0.7.6.201602180812'
+    ext.jacoco_version = '0.7.2.201409121644'
     repositories {
         mavenCentral()
         jcenter()
@@ -48,7 +48,9 @@ android {
         }
     }
     sourceSets {
-        main.java.srcDirs += 'src/main/java'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
     }
 }
 
@@ -66,6 +68,10 @@ dependencies {
 
     // test
     testCompile 'junit:junit:4.12'
+
+    // Robolectric
+    testCompile "org.robolectric:robolectric:3.0"
+
     androidTestCompile 'com.android.support:support-annotations:23.2.0'
     androidTestCompile 'com.android.support.test:runner:0.4.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
@@ -82,7 +88,7 @@ repositories {
 }
 
 jacoco {
-    toolVersion = '0.7.6.201602180812'
+    toolVersion = "$jacoco_version"
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedCheck', 'test']) {
@@ -93,9 +99,6 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedCheck', 'test'])
         xml.enabled = false
         html.enabled = true
     }
-
-    // use hidden configuration, for details look into JacocoPlugin.groovy
-    //jacocoClasspath = project.configurations['androidJacocoAnt']
 
     // exclude auto-generated classes and tests
     def fileFilter = ['**/R.class',
@@ -109,6 +112,29 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedCheck', 'test'])
     sourceDirectories = files([android.sourceSets.main.java.srcDirs])
     classDirectories = files([debugTree])
     executionData = fileTree(dir: project.projectDir, includes: ['**/*.exec', '**/*.ec'])
+}
+
+//noinspection GroovyAssignabilityCheck
+task jacocoTestReportKotlin(dependsOn: 'jacocoTestReportRaw') << {
+    def indexFileName = 'index.html'
+    def indexSourceFileName = 'index.source.html'
+    def reports = new File(project.buildDir, '/reports/jacoco/jacocoTestReport/html')
+    def index = new File(reports, indexFileName).getText('UTF-8')
+    def footer = '<div class="footer">'
+    def result = new StringBuilder(index.substring(0, index.indexOf(footer)))
+
+    reports.eachDirMatch({ !new File(it).name.startsWith(".") }) { dir ->
+        def moduleIndex = new File(dir, indexSourceFileName)
+        def content = moduleIndex.getText('UTF-8')
+                .replaceAll('\\.\\./\\.resources', '.resources')
+                .replaceAll('href="', "href=\"${dir.name}/")
+        result.append(content.substring(content.indexOf('<h1>'), content.indexOf(footer)))
+    }
+    result.append(index.substring(index.indexOf(footer)))
+
+    def output = new File(reports, indexSourceFileName)
+    output.delete()
+    output << result.toString()
 }
 
 tasks.coveralls {

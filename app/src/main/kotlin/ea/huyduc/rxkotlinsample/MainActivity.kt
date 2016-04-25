@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (BuildConfig.DEBUG) {
-            val km : KeyguardManager = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-            val keyguardLock : KeyguardManager.KeyguardLock = km.newKeyguardLock(MainActivity::class.simpleName)
+            val km = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+            val keyguardLock = km.newKeyguardLock(MainActivity::class.simpleName)
             keyguardLock.disableKeyguard()
             window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
         }
