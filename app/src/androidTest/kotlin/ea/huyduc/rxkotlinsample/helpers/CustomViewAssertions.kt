@@ -2,7 +2,7 @@ package ea.huyduc.rxkotlinsample.helpers
 
 import android.support.test.espresso.ViewAssertion
 
-import junit.framework.Assert.assertTrue
+import org.junit.Assert.assertTrue
 
 class CustomViewAssertions {
     companion object {
