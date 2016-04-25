@@ -25,7 +25,7 @@ test:
     - adb shell input keyevent 82
     # run tests against the emulator.
     - ./gradlew jacocoTestReport --stacktrace -PdisablePreDex:
-      timeout: 2400
+        timeout: 2400
     # rename the report folder of jacoco to meet the report name in the plugin
     - mv $APP_HOME/build/reports/jacoco/jacocoTestReport $APP_HOME/build/reports/jacoco/test
     # run coveralls to upload result to Coveralls
