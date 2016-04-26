@@ -4,6 +4,7 @@ import android.app.Fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.Button
 import ea.huyduc.rxkotlinsample.R
@@ -16,13 +17,13 @@ class TopFragment : Fragment() {
     private lateinit var mRxBus: RxBus
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var layout: View? = inflater?.inflate(R.layout.fragment_top, container)
-        val btnClick = layout?.findViewById(R.id.btn_click) as Button
-        btnClick.setOnClickListener({
+        var layout: View = inflater!!.inflate(R.layout.fragment_top, container)
+        val btnClick = layout.findViewById(R.id.btn_click)
+        btnClick.setOnClickListener {
             if (mRxBus.hasObservers()) {
                 mRxBus.send(ClickEvent())
             }
-        })
+        }
         return layout
     }
 

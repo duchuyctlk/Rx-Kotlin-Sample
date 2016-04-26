@@ -1,0 +1,42 @@
+machine:
+  environment:
+    APP_HOME: /home/ubuntu/Rx-Kotlin-Sample/app
+    PATH: "~/$CIRCLE_PROJECT_REPONAME/gradle-2.10/bin:$PATH"
+    ADB_INSTALL_TIMEOUT : 20
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxPermSize=512m -Xms512m"'
+    CI_BUILD_NUMBER: $CIRCLE_BUILD_NUM
+    CI_BUILD_URL: $CIRCLE_BUILD_URL
+    CI_BRANCH: $CIRCLE_BRANCH
+dependencies:
+  pre:
+    - wget "https://services.gradle.org/distributions/gradle-2.10-bin.zip"; unzip gradle-2.10-bin.zip
+    - echo y | android update sdk --no-ui --all --filter tool,extra-android-m2repository,extra-android-support,extra-google-google_play_services,extra-google-m2repository,android-23
+    - echo y | android update sdk --no-ui --all --filter build-tools-23.0.2
+test:
+  override:
+    # start the emulator
+    - emulator -avd circleci-android22 -netdelay none -netspeed full -no-audio:
+        background: true
+        parallel: true
+    # wait for it to have booted
+    - circle-android wait-for-boot
+    # unlock the emulator screen
+    - sleep 10
+    - adb shell input keyevent 82
+    # run tests against the emulator.
+    - ./gradlew jacocoTestReport --stacktrace -PdisablePreDex:
+        timeout: 2400
+    # rename the report folder of jacoco to meet the report name in the plugin
+    - mv $APP_HOME/build/reports/jacoco/jacocoTestReport $APP_HOME/build/reports/jacoco/test
+    # run coveralls to upload result to Coveralls
+    - ./gradlew coveralls --stacktrace
+  post:
+    # copy coverage result to artifacts
+    - mv $APP_HOME/build/reports/jacoco/test $APP_HOME/build/reports/jacoco/coverage
+    - cp -r $APP_HOME/build/reports/jacoco/coverage $CIRCLE_ARTIFACTS
+    # copy the build outputs to artifacts
+    - cp -r $APP_HOME/build/outputs $CIRCLE_ARTIFACTS
+    # copy the build reports to artifacts
+    - cp -r $APP_HOME/build/reports $CIRCLE_ARTIFACTS
+    # copy the test results to the test results directory.
+    - cp -r $APP_HOME/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
