@@ -29,7 +29,7 @@ test:
     # rename the report folder of jacoco to meet the report name in the plugin
     - mv $APP_HOME/build/reports/jacoco/jacocoTestReport $APP_HOME/build/reports/jacoco/test
     # run coveralls to upload result to Coveralls
-    - ./gradlew coveralls --stacktrace
+    - ./gradlew coveralls
   post:
     # copy coverage result to artifacts
     - mv $APP_HOME/build/reports/jacoco/test $APP_HOME/build/reports/jacoco/coverage
