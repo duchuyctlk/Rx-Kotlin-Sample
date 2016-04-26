@@ -96,7 +96,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedCheck', 'test'])
     description = 'Generate Jacoco coverage reports after running tests.'
 
     reports {
-        xml.enabled = false
+        xml.enabled = true
         html.enabled = true
     }
 
