@@ -46,6 +46,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            testCoverageEnabled true
+        }
     }
     sourceSets {
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
@@ -115,7 +118,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedCheck', 'test'])
 }
 
 //noinspection GroovyAssignabilityCheck
-task jacocoTestReportKotlin(dependsOn: 'jacocoTestReportRaw') << {
+task jacocoTestReportKotlin(dependsOn: 'jacocoTestReport') << {
     def indexFileName = 'index.html'
     def indexSourceFileName = 'index.source.html'
     def reports = new File(project.buildDir, '/reports/jacoco/jacocoTestReport/html')
