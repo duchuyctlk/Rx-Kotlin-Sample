@@ -1,7 +1,5 @@
 package ea.huyduc.rxkotlinsample
 
-import android.app.KeyguardManager
-import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
@@ -14,10 +12,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (BuildConfig.DEBUG) {
-            val km = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-            val keyguardLock = km.newKeyguardLock(MainActivity::class.simpleName)
-            keyguardLock.disableKeyguard()
-            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                    or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
         }
 
         setContentView(R.layout.activity_main)

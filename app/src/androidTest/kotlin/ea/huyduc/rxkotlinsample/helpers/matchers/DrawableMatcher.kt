@@ -13,7 +13,7 @@ class DrawableMatcher : TypeSafeMatcher<View> {
     private var mExpectedId: Int
     private var mResourceName: String? = null
 
-    constructor(expectedId: Int): super(View::class.java) {
+    constructor(expectedId: Int) : super(View::class.java) {
         mExpectedId = expectedId;
     }
 
