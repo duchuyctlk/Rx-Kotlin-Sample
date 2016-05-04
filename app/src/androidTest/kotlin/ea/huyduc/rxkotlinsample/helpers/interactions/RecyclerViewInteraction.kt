@@ -28,7 +28,7 @@ class RecyclerViewInteraction<A> {
                     .perform(scrollToPosition<RecyclerView.ViewHolder>(i))
                     .check(RecyclerItemViewAssertion(i, mItems[i], itemViewAssertion))
         }
-        return this;
+        return this
     }
 
     companion object {
@@ -38,6 +38,6 @@ class RecyclerViewInteraction<A> {
     }
 
     interface ItemViewAssertion<A> {
-        fun check(item: A, view: View, e: NoMatchingViewException?)
+        fun check(item: A, view: View, e: NoMatchingViewException)
     }
 }

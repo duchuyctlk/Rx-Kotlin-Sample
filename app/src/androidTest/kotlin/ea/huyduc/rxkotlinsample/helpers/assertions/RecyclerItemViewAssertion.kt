@@ -15,12 +15,12 @@ class RecyclerItemViewAssertion<A> : ViewAssertion {
     private var mItemViewAssertion: RecyclerViewInteraction.ItemViewAssertion<A>
 
     constructor(position: Int, item: A, itemViewAssertion: RecyclerViewInteraction.ItemViewAssertion<A>) {
-        mPosition = position;
-        mItem = item;
-        mItemViewAssertion = itemViewAssertion;
+        mPosition = position
+        mItem = item
+        mItemViewAssertion = itemViewAssertion
     }
 
-    override fun check(view: View?, noViewFoundException: NoMatchingViewException?) {
+    override fun check(view: View?, noViewFoundException: NoMatchingViewException) {
         val recyclerView: RecyclerView = view as RecyclerView
         val viewHolderForPosition: RecyclerView.ViewHolder?
                 = recyclerView.findViewHolderForLayoutPosition(mPosition)
@@ -29,10 +29,10 @@ class RecyclerItemViewAssertion<A> : ViewAssertion {
                     .withActionDescription(toString())
                     .withViewDescription(HumanReadables.describe(view))
                     .withCause(IllegalStateException("No view holder at mPosition: " + mPosition))
-                    .build();
+                    .build()
         } else {
-            val viewAtPosition: View = viewHolderForPosition.itemView;
-            mItemViewAssertion.check(mItem, viewAtPosition, noViewFoundException);
+            val viewAtPosition: View = viewHolderForPosition.itemView
+            mItemViewAssertion.check(mItem, viewAtPosition, noViewFoundException)
         }
     }
 }

@@ -31,15 +31,15 @@ class CompoundDrawablesMatcher : TypeSafeMatcher<View> {
             drawables = target.compoundDrawables
         }
 
-        var resources: Resources = target.context.resources
+        var resources = target.context.resources
         var expectedDrawable: Drawable? = ContextCompat.getDrawable(target.context, mExpectedId)
         mResourceName = resources.getResourceEntryName(mExpectedId)
 
-        if (expectedDrawable != null && drawables != null) {
+        if (expectedDrawable != null && expectedDrawable is BitmapDrawable && drawables != null) {
             for (drawable in drawables) {
                 if (drawable != null && drawable is BitmapDrawable) {
-                    var bitmap: Bitmap = drawable.bitmap
-                    var otherBitmap: Bitmap = (expectedDrawable as BitmapDrawable).bitmap
+                    var bitmap = drawable.bitmap
+                    var otherBitmap = expectedDrawable.bitmap
                     return bitmap.sameAs(otherBitmap)
                 }
             }
