@@ -68,6 +68,7 @@ dependencies {
 
     // Android
     compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:recyclerview-v7:23.2.0'
 
     // test
     testCompile 'junit:junit:4.12'
@@ -119,18 +120,23 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['connectedCheck', 'test'])
 
 //noinspection GroovyAssignabilityCheck
 task jacocoTestReportKotlin(dependsOn: 'jacocoTestReport') << {
-    def indexFileName = 'index.html'
-    def indexSourceFileName = 'index.source.html'
-    def reports = new File(project.buildDir, '/reports/jacoco/jacocoTestReport/html')
-    def index = new File(reports, indexFileName).getText('UTF-8')
+    def strHtml = 'html'
+    def strUTF8 = 'UTF-8'
+    def strHref = 'href=\"'
+    def strResources = '.resources'
+
+    def indexFileName = "index.$strHtml"
+    def indexSourceFileName = "index.source.$strHtml"
+    def reports = new File(project.buildDir, "/reports/jacoco/${tasks.jacocoTestReport.name}/$strHtml")
+    def index = new File(reports, indexFileName).getText(strUTF8)
     def footer = '<div class="footer">'
     def result = new StringBuilder(index.substring(0, index.indexOf(footer)))
 
     reports.eachDirMatch({ !new File(it).name.startsWith(".") }) { dir ->
         def moduleIndex = new File(dir, indexSourceFileName)
-        def content = moduleIndex.getText('UTF-8')
-                .replaceAll('\\.\\./\\.resources', '.resources')
-                .replaceAll('href="', "href=\"${dir.name}/")
+        def content = moduleIndex.getText(strUTF8)
+                .replaceAll("\\.\\./\\$strResources", strResources)
+                .replaceAll(strHref, "$strHref${dir.name}/")
         result.append(content.substring(content.indexOf('<h1>'), content.indexOf(footer)))
     }
     result.append(index.substring(index.indexOf(footer)))

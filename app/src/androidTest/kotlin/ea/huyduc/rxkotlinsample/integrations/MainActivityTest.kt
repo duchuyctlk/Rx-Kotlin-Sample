@@ -16,7 +16,7 @@ import ea.huyduc.rxkotlinsample.R
 import ea.huyduc.rxkotlinsample.MainActivity
 import ea.huyduc.rxkotlinsample.fragments.BottomFragment
 import ea.huyduc.rxkotlinsample.fragments.TopFragment
-import ea.huyduc.rxkotlinsample.helpers.CustomViewAssertions
+import ea.huyduc.rxkotlinsample.helpers.assertions.CustomViewAssertions
 
 import org.junit.Assert.assertTrue
 

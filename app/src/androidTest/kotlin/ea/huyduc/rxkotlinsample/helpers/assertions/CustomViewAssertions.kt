@@ -1,4 +1,4 @@
-package ea.huyduc.rxkotlinsample.helpers
+package ea.huyduc.rxkotlinsample.helpers.assertions
 
 import android.support.test.espresso.ViewAssertion
 
