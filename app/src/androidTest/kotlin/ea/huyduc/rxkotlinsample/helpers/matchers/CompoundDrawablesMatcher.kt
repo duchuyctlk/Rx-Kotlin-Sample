@@ -24,22 +24,25 @@ class CompoundDrawablesMatcher : TypeSafeMatcher<View> {
             return false
         }
 
-        var drawables: Array<Drawable?>? = null
-        if (target is TextView) {
-            drawables = target.compoundDrawables
-        } else if (target is Button) {
-            drawables = target.compoundDrawables
-        }
-
-        var resources: Resources = target.context.resources
+        var drawables: Array<Drawable?>? =
+                if (target is TextView) {
+                    target.compoundDrawables
+                } else {
+                    if (target is Button) {
+                        target.compoundDrawables
+                    } else {
+                        null
+                    }
+                }
+        var resources = target.context.resources
         var expectedDrawable: Drawable? = ContextCompat.getDrawable(target.context, mExpectedId)
         mResourceName = resources.getResourceEntryName(mExpectedId)
 
-        if (expectedDrawable != null && drawables != null) {
+        if (expectedDrawable != null && expectedDrawable is BitmapDrawable && drawables != null) {
             for (drawable in drawables) {
                 if (drawable != null && drawable is BitmapDrawable) {
-                    var bitmap: Bitmap = drawable.bitmap
-                    var otherBitmap: Bitmap = (expectedDrawable as BitmapDrawable).bitmap
+                    var bitmap = drawable.bitmap
+                    var otherBitmap = expectedDrawable.bitmap
                     return bitmap.sameAs(otherBitmap)
                 }
             }

@@ -26,16 +26,17 @@ class DrawableMatcher : TypeSafeMatcher<View> {
             return target.drawable == null
         }
 
-        var resources: Resources = target.context.resources
+        var resources = target.context.resources
         var expectedDrawable: Drawable? = ContextCompat.getDrawable(target.context, mExpectedId)
         mResourceName = resources.getResourceEntryName(mExpectedId)
 
-        if (expectedDrawable == null || target.drawable !is BitmapDrawable) {
+        if (expectedDrawable == null || expectedDrawable !is BitmapDrawable ||
+                target.drawable !is BitmapDrawable) {
             return false
         }
 
         var bitmap = (target.drawable as BitmapDrawable).bitmap
-        var otherBitmap = (expectedDrawable as BitmapDrawable).bitmap
+        var otherBitmap = expectedDrawable.bitmap
         return bitmap.sameAs(otherBitmap)
     }
 
