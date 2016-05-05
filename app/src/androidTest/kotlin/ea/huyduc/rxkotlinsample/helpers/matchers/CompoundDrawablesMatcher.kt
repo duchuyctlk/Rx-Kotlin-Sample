@@ -24,13 +24,16 @@ class CompoundDrawablesMatcher : TypeSafeMatcher<View> {
             return false
         }
 
-        var drawables: Array<Drawable?>? = null
-        if (target is TextView) {
-            drawables = target.compoundDrawables
-        } else if (target is Button) {
-            drawables = target.compoundDrawables
-        }
-
+        var drawables: Array<Drawable?>? =
+                if (target is TextView) {
+                    target.compoundDrawables
+                } else {
+                    if (target is Button) {
+                        target.compoundDrawables
+                    } else {
+                        null
+                    }
+                }
         var resources = target.context.resources
         var expectedDrawable: Drawable? = ContextCompat.getDrawable(target.context, mExpectedId)
         mResourceName = resources.getResourceEntryName(mExpectedId)

@@ -21,9 +21,8 @@ class RecyclerItemViewAssertion<A> : ViewAssertion {
     }
 
     override fun check(view: View?, noViewFoundException: NoMatchingViewException) {
-        val recyclerView: RecyclerView = view as RecyclerView
-        val viewHolderForPosition: RecyclerView.ViewHolder?
-                = recyclerView.findViewHolderForLayoutPosition(mPosition)
+        val recyclerView = view as RecyclerView
+        val viewHolderForPosition = recyclerView.findViewHolderForLayoutPosition(mPosition)
         if (viewHolderForPosition === null) {
             throw (PerformException.Builder())
                     .withActionDescription(toString())
@@ -31,7 +30,7 @@ class RecyclerItemViewAssertion<A> : ViewAssertion {
                     .withCause(IllegalStateException("No view holder at mPosition: " + mPosition))
                     .build()
         } else {
-            val viewAtPosition: View = viewHolderForPosition.itemView
+            val viewAtPosition = viewHolderForPosition.itemView
             mItemViewAssertion.check(mItem, viewAtPosition, noViewFoundException)
         }
     }
